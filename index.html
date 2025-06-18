@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MaiLu & Co. - Horario 2AVP</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fbe4f0;
+    }
+
+    .pantalla-inicio {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url('https://i.imgur.com/9h8aIUF.jpg'); /* Imagen aesthetic */
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    }
+
+    .pantalla-inicio h1 {
+      font-size: 3em;
+      margin: 10px;
+    }
+
+    .pantalla-inicio p {
+      font-size: 1.2em;
+      margin: 5px;
+    }
+
+    .pantalla-inicio button {
+      margin-top: 20px;
+      padding: 10px 25px;
+      font-size: 1.1em;
+      border: none;
+      background-color: #ffffffcc;
+      color: #b85794;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .pantalla-inicio button:hover {
+      background-color: #ffe0f1;
+    }
+
+    #chat {
+      display: none;
+      max-width: 700px;
+      background-color: rgba(255, 255, 255, 0.88);
+      margin: 50px auto;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    .titulo {
+      text-align: center;
+      font-size: 32px;
+      font-weight: bold;
+      color: #d26da7;
+      margin-bottom: 5px;
+      text-shadow: 1px 1px #fff;
+    }
+
+    .autoras {
+      text-align: center;
+      font-size: 15px;
+      color: #555;
+      margin-bottom: 25px;
+    }
+
+    .mensaje {
+      margin: 10px 0;
+      line-height: 1.6;
+    }
+
+    .bot {
+      background-color: #fde6f2;
+      padding: 12px;
+      border-radius: 12px;
+      max-width: 85%;
+      border: 1px solid #f3cce0;
+    }
+
+    input, button {
+      padding: 10px;
+      margin-top: 10px;
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #d26da7;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #b85794;
+    }
+
+    .oculto {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PANTALLA DE INICIO -->
+  <div class="pantalla-inicio" id="inicio">
+    <h1>MaiLu & Co.</h1>
+    <p>Madai Yamile Corona Vargas & Luciana Lozano Rivera</p>
+    <button onclick="mostrarChat()">Entrar</button>
+  </div>
+
+  <!-- CHAT DE HORARIO -->
+  <div id="chat">
+    <div class="titulo">MaiLu & Co.</div>
+    <div class="autoras">Madai Yamile Corona Vargas • Luciana Lozano Rivera</div>
+
+    <div class="mensaje bot">Este código fue hecho originalmente para Python pero se adaptó a una página web interactiva. 😊</div>
+
+    <div id="login">
+      <div class="mensaje bot">📧 Ingresa tu correo institucional para continuar:</div>
+      <input type="email" id="correo" placeholder="ejemplo@cbtis156.edu.mx">
+      <button onclick="validarCorreo(event)">Iniciar sesión</button>
+    </div>
+
+    <div id="conversacion" class="oculto">
+      <div class="mensaje bot">👋 Hola! ¿Qué día quieres consultar tu horario?</div>
+      <input type="text" id="dia" placeholder="Ej. lunes">
+      <button onclick="mostrarHorario()">Consultar</button>
+      <div id="respuesta"></div>
+    </div>
+  </div>
+
+  <script>
+    function mostrarChat() {
+      document.getElementById("inicio").style.display = "none";
+      document.getElementById("chat").style.display = "block";
+    }
+
+    const horarios = {
+      lunes: ["2 clases de Pensamiento Matemático II", "1 clase de M1.S2. Codifica Software", "Receso", "4 clases de M1.S1. Diseña Software", "Salida"],
+      martes: ["1 clase de M1.S3. Implementa Software", "2 clases de Pensamiento Matemático II", "Receso", "1 clase de Inglés II", "3 clases de M1.S2. Codifica Software", "Salida"],
+      miercoles: ["2 clases de M1.S3. Implementa Software", "1 clase de Lengua y Comunicación II", "1 clase de Energía y Materia", "Receso", "1 clase de Diseña Software", "3 clases de Codifica Software", "Salida"],
+      jueves: ["1 clase de Ciencias Sociales II", "2 clases de Lengua y Comunicación II", "1 clase de Cultura Digital II", "Receso", "1 clase de Cultura Digital II", "2 clases de Energía y Materia", "1 clase de Ciencias Sociales II", "Salida"],
+      viernes: ["1 clase de Socioemocional II", "1 clase de Energía y Materia", "Receso", "2 clases de Implementa Software", "2 clases de Inglés II", "Salida"]
+    };
+
+    function validarCorreo(e) {
+      e.preventDefault();
+      const correo = document.getElementById("correo").value;
+      if (correo.endsWith("@cbtis156.edu.mx")) {
+        document.getElementById("login").classList.add("oculto");
+        document.getElementById("conversacion").classList.remove("oculto");
+      } else {
+        alert("Por favor ingresa un correo válido del CBTis 156");
+      }
+    }
+
+    function mostrarHorario() {
+      const input = document.getElementById("dia").value.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      const respuesta = document.getElementById("respuesta");
+      respuesta.innerHTML = "";
+
+      if (horarios[input]) {
+        const diaC = input.charAt(0).toUpperCase() + input.slice(1);
+        respuesta.innerHTML += `<div class="mensaje bot"><strong>📅 Clases del ${diaC}:</strong></div>`;
+        horarios[input].forEach(c => {
+          respuesta.innerHTML += `<div class="mensaje bot">- ${c}</div>`;
+        });
+      } else {
+        respuesta.innerHTML = `<div class="mensaje bot">❌ Día no válido. Por favor escribe: lunes, martes, miércoles, jueves o viernes.</div>`;
+      }
+    }
+  </script>
+
+</body>
+</html>
